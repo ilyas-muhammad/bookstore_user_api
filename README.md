@@ -1,2 +1,2 @@
-# bookstore_user_api
+# Bookstore User Api
 User API with Golang
