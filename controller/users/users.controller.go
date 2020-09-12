@@ -2,6 +2,7 @@ package users
 
 import (
 	"net/http"
+	"strconv"
 
 	"petaniweb.com/rest/v1/bookstore_user_api/utils/errors"
 
@@ -33,5 +34,18 @@ func CreateUser(c *gin.Context) {
 
 // GetUser : to get user by id
 func GetUser(c *gin.Context) {
-	c.String(http.StatusNotImplemented, "Implement me!")
+	userID, errID := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	if errID != nil {
+		err := errors.BadRequestError("User ID should be a number")
+		c.JSON(err.Status, err)
+		return
+	}
+
+	user, getErr := services.GetUser(userID)
+	if errID != nil {
+		c.JSON(getErr.Status, getErr)
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
 }

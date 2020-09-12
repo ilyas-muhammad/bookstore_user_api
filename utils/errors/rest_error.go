@@ -11,11 +11,20 @@ type RestErr struct {
 	Error   string `json:"error"`
 }
 
-// BadRequestError : return rest error related to bad request
+// BadRequestError : return bad request rest error
 func BadRequestError(message string) *RestErr {
 	return &RestErr{
 		Message: message,
 		Status:  http.StatusBadRequest,
 		Error:   "BAD_REQUEST",
+	}
+}
+
+// NotFoundError : return not found rest error
+func NotFoundError(message string) *RestErr {
+	return &RestErr{
+		Message: message,
+		Status:  http.StatusNotFound,
+		Error:   "NOT_FOUND",
 	}
 }
