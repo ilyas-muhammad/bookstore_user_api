@@ -3,6 +3,8 @@ package users
 import (
 	"fmt"
 
+	"petaniweb.com/rest/v1/bookstore_user_api/utils/dateutils"
+
 	"petaniweb.com/rest/v1/bookstore_user_api/utils/errors"
 )
 
@@ -33,6 +35,8 @@ func (user *User) Save() *errors.RestErr {
 		}
 		return errors.BadRequestError(fmt.Sprintf("User %d already exist", user.ID))
 	}
+
+	user.DateCreated = dateutils.GetNowString()
 
 	usersDB[user.ID] = user
 	return nil
