@@ -1,8 +1,8 @@
 package services
 
 import (
-	"petaniweb.com/rest/v1/bookstore_user_api/domain/users"
-	"petaniweb.com/rest/v1/bookstore_user_api/utils/errors"
+	"github.com/ilyas-muhammad/bookstore_user_api/domain/users"
+	"github.com/ilyas-muhammad/bookstore_user_api/utils/errors"
 )
 
 // GetUser : get user by id

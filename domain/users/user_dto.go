@@ -3,7 +3,7 @@ package users
 import (
 	"strings"
 
-	"petaniweb.com/rest/v1/bookstore_user_api/utils/errors"
+	"github.com/ilyas-muhammad/bookstore_user_api/utils/errors"
 )
 
 // User : user type

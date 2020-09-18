@@ -4,11 +4,11 @@ import (
 	"net/http"
 	"strconv"
 
-	"petaniweb.com/rest/v1/bookstore_user_api/utils/errors"
+	"github.com/ilyas-muhammad/bookstore_user_api/utils/errors"
 
-	"petaniweb.com/rest/v1/bookstore_user_api/services"
+	"github.com/ilyas-muhammad/bookstore_user_api/services"
 
-	"petaniweb.com/rest/v1/bookstore_user_api/domain/users"
+	"github.com/ilyas-muhammad/bookstore_user_api/domain/users"
 
 	"github.com/gin-gonic/gin"
 )

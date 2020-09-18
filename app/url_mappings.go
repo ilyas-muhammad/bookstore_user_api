@@ -1,8 +1,8 @@
 package app
 
 import (
-	"petaniweb.com/rest/v1/bookstore_user_api/controller"
-	"petaniweb.com/rest/v1/bookstore_user_api/controller/users"
+	"github.com/ilyas-muhammad/bookstore_user_api/controller"
+	"github.com/ilyas-muhammad/bookstore_user_api/controller/users"
 )
 
 func mapUrls() {
