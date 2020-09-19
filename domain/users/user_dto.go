@@ -15,7 +15,7 @@ type User struct {
 	DateCreated string `json:"date_created"`
 }
 
-// Validate : user method to validate persitence data
+// Validate : user method to validate persistence data
 func (user *User) Validate() *errors.RestErr {
 	user.Email = strings.TrimSpace(strings.ToLower(user.Email))
 	if user.Email == "" {
