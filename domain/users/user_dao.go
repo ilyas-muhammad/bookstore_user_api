@@ -8,8 +8,9 @@ import (
 )
 
 const (
-	insertQuery  = "INSERT INTO users(first_name, last_name, email) VALUES (?,?,?);"
-	getByIdQuery = "SELECT id, first_name, last_name, email, date_created FROM users WHERE id=?;"
+	insertQuery     = "INSERT INTO users(first_name, last_name, email) VALUES (?,?,?);"
+	getByIdQuery    = "SELECT id, first_name, last_name, email, date_created FROM users WHERE id=?;"
+	updateByIdQuery = "UPDATE users SET first_name=?, last_name=?, email=? WHERE id=?;"
 )
 
 // Get : Method to get user by id
@@ -48,5 +49,21 @@ func (user *User) Save() *errors.RestErr {
 
 	user.ID = userID
 	user.DateCreated = dateutils.GetNowString()
+	return nil
+}
+
+// Update : Method to update existing user
+func (user *User) Update() *errors.RestErr {
+	stmt, err := users_db.Client.Prepare(updateByIdQuery)
+	if err != nil {
+		return errors.InternalServerError(err.Error())
+	}
+	defer stmt.Close()
+
+	_, updateErr := stmt.Exec(user.FirstName, user.LastName, user.Email, user.ID)
+	if updateErr != nil {
+		return mysql_utils.ParseError(updateErr)
+	}
+
 	return nil
 }
