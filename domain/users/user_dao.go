@@ -11,6 +11,7 @@ const (
 	insertQuery     = "INSERT INTO users(first_name, last_name, email) VALUES (?,?,?);"
 	getByIdQuery    = "SELECT id, first_name, last_name, email, date_created FROM users WHERE id=?;"
 	updateByIdQuery = "UPDATE users SET first_name=?, last_name=?, email=? WHERE id=?;"
+	deleteByIdQuery = "DELETE FROM users WHERE id=?;"
 )
 
 // Get : Method to get user by id
@@ -63,6 +64,21 @@ func (user *User) Update() *errors.RestErr {
 	_, updateErr := stmt.Exec(user.FirstName, user.LastName, user.Email, user.ID)
 	if updateErr != nil {
 		return mysql_utils.ParseError(updateErr)
+	}
+
+	return nil
+}
+
+// Delete : Method to delete user
+func (user *User) Delete() *errors.RestErr {
+	stmt, err := users_db.Client.Prepare(deleteByIdQuery)
+	if err != nil {
+		return errors.InternalServerError(err.Error())
+	}
+	defer stmt.Close()
+
+	if _, deleteErr := stmt.Exec(user.ID); deleteErr != nil {
+		return mysql_utils.ParseError(deleteErr)
 	}
 
 	return nil

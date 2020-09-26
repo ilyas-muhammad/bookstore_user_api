@@ -13,8 +13,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// CreateUser : to create new user
-func CreateUser(c *gin.Context) {
+// ValidateUserIDParameter : DRY to get user by given request parameter id
+func ValidateUserIDParameter(userIdParam string) (int64, *errors.RestErr) {
+	userID, errID := strconv.ParseInt(userIdParam, 10, 64)
+	if errID != nil {
+		return 0, errors.BadRequestError("User ID should be a number")
+	}
+
+	return userID, nil
+}
+
+// Create : to create new user
+func Create(c *gin.Context) {
 	var user users.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		restErr := errors.BadRequestError("Invalid json body request")
@@ -32,12 +42,11 @@ func CreateUser(c *gin.Context) {
 	c.JSON(http.StatusCreated, result)
 }
 
-// GetUser : to get user by id
-func GetUser(c *gin.Context) {
-	userID, errID := strconv.ParseInt(c.Param("user_id"), 10, 64)
+// Get : to get user by id
+func Get(c *gin.Context) {
+	userID, errID := ValidateUserIDParameter(c.Param("user_id"))
 	if errID != nil {
-		err := errors.BadRequestError("User ID should be a number")
-		c.JSON(err.Status, err)
+		c.JSON(errID.Status, errID)
 		return
 	}
 
@@ -50,12 +59,11 @@ func GetUser(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
-// UpdateUser : to update user by given id
-func UpdateUser(c *gin.Context) {
-	userID, errID := strconv.ParseInt(c.Param("user_id"), 10, 64)
+// Update : to update user by given id
+func Update(c *gin.Context) {
+	userID, errID := ValidateUserIDParameter(c.Param("user_id"))
 	if errID != nil {
-		err := errors.BadRequestError("User ID should be a number")
-		c.JSON(err.Status, err)
+		c.JSON(errID.Status, errID)
 		return
 	}
 
@@ -78,4 +86,20 @@ func UpdateUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, result)
+}
+
+// Delete : function to delete user by given id
+func Delete(c *gin.Context) {
+	userID, errID := ValidateUserIDParameter(c.Param("user_id"))
+	if errID != nil {
+		c.JSON(errID.Status, errID)
+		return
+	}
+
+	if err := services.DeleteUser(userID); err != nil {
+		c.JSON(err.Status, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]string{"status": "deleted"})
 }
