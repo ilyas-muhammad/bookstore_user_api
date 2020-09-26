@@ -4,10 +4,18 @@ import "time"
 
 const (
 	apiDateLayout = "2006-01-02T15:04:05Z"
+	apiDBLayout   = "2006-01-02 15:04:05"
 )
+
+func GetNow() time.Time {
+	return time.Now().UTC()
+}
 
 // GetNowString : get utc current time in string
 func GetNowString() string {
-	now := time.Now().UTC()
-	return now.Format(apiDateLayout)
+	return GetNow().Format(apiDateLayout)
+}
+
+func GetNowDBFormat() string {
+	return GetNow().Format(apiDBLayout)
 }
