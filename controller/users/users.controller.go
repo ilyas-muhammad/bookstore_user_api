@@ -69,7 +69,9 @@ func UpdateUser(c *gin.Context) {
 
 	user.ID = userID
 
-	result, updateErr := services.UpdateUser(user)
+	isPartial := c.Request.Method == http.MethodPatch
+
+	result, updateErr := services.UpdateUser(isPartial, user)
 	if updateErr != nil {
 		c.JSON(updateErr.Status, updateErr)
 		return
