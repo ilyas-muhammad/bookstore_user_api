@@ -7,8 +7,22 @@ import (
 	"github.com/ilyas-muhammad/bookstore_user_api/utils/errors"
 )
 
+var (
+	UserService usersServiceInterface = &usersService{}
+)
+
+type usersService struct{}
+
+type usersServiceInterface interface {
+	GetUser(int64) (*users.User, *errors.RestErr)
+	CreateUser(users.User) (*users.User, *errors.RestErr)
+	UpdateUser(isPartial bool, user users.User) (*users.User, *errors.RestErr)
+	DeleteUser(int64) *errors.RestErr
+	Search(string) (users.Users, *errors.RestErr)
+}
+
 // GetUser : get user by id
-func GetUser(userID int64) (*users.User, *errors.RestErr) {
+func (s *usersService) GetUser(userID int64) (*users.User, *errors.RestErr) {
 	result := &users.User{ID: userID}
 	if err := result.Get(); err != nil {
 		return nil, err
@@ -18,7 +32,7 @@ func GetUser(userID int64) (*users.User, *errors.RestErr) {
 }
 
 // CreateUser : user creation business logic
-func CreateUser(user users.User) (*users.User, *errors.RestErr) {
+func (s *usersService) CreateUser(user users.User) (*users.User, *errors.RestErr) {
 	if err := user.Validate(); err != nil {
 		return nil, err
 	}
@@ -34,9 +48,9 @@ func CreateUser(user users.User) (*users.User, *errors.RestErr) {
 }
 
 // UpdateUser : user updating service
-func UpdateUser(isPartial bool, user users.User) (*users.User, *errors.RestErr) {
-	currentUser, err := GetUser(user.ID)
-	if err != nil {
+func (s *usersService) UpdateUser(isPartial bool, user users.User) (*users.User, *errors.RestErr) {
+	currentUser := &users.User{ID: user.ID}
+	if err := currentUser.Get(); err != nil {
 		return nil, err
 	}
 
@@ -64,13 +78,13 @@ func UpdateUser(isPartial bool, user users.User) (*users.User, *errors.RestErr) 
 }
 
 // DeleteUser : deleting user
-func DeleteUser(userID int64) *errors.RestErr {
+func (s *usersService) DeleteUser(userID int64) *errors.RestErr {
 	user := &users.User{ID: userID}
 	return user.Delete()
 }
 
 // Search : Find users by given status
-func Search(status string) (users.Users, *errors.RestErr) {
+func (s *usersService) Search(status string) (users.Users, *errors.RestErr) {
 	dao := &users.User{}
 	return dao.FindByStatus(status)
 }
